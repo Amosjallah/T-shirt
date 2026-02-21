@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import ProductSalesStats from './ProductSalesStats';
 
@@ -58,11 +58,8 @@ export default function AdminOrdersPage() {
   const [productFilter, setProductFilter] = useState('all');
   const [availableProducts, setAvailableProducts] = useState<string[]>([]);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -125,7 +122,11 @@ export default function AdminOrdersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   const statusColors: Record<string, string> = {
     'pending': 'bg-amber-100 text-amber-700 border-amber-200',

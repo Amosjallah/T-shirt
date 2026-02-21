@@ -1,14 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 function OrderTrackingContent() {
   const searchParams = useSearchParams();
   const urlOrderNumber = searchParams.get('order') || '';
-  
+
   const [orderNumber, setOrderNumber] = useState(urlOrderNumber);
   const [email, setEmail] = useState('');
   const [isTracking, setIsTracking] = useState(false);
@@ -18,17 +18,11 @@ function OrderTrackingContent() {
 
   // Auto-track if order number AND email are in the URL
   const urlEmail = searchParams.get('email') || '';
-  
-  useEffect(() => {
-    if (urlOrderNumber && urlEmail) {
-      setEmail(urlEmail);
-      fetchOrder(urlOrderNumber, urlEmail);
-    }
-  }, [urlOrderNumber, urlEmail]);
 
-  const fetchOrder = async (orderNum: string, verifyEmail?: string) => {
+
+  const fetchOrder = useCallback(async (orderNum: string, verifyEmail?: string) => {
     const emailToVerify = verifyEmail || email;
-    
+
     // SECURITY: Email is required for order tracking to prevent unauthorized access
     if (!emailToVerify) {
       setError('Please enter your email address to verify your identity.');
@@ -88,7 +82,14 @@ function OrderTrackingContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [email]);
+
+  useEffect(() => {
+    if (urlOrderNumber && urlEmail) {
+      setEmail(urlEmail);
+      fetchOrder(urlOrderNumber, urlEmail);
+    }
+  }, [urlOrderNumber, urlEmail, fetchOrder]);
 
   const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,8 +131,8 @@ function OrderTrackingContent() {
         key: 'payment',
         title: 'Payment',
         description: paymentStatus === 'paid' ? 'Payment confirmed' : 'Awaiting payment',
-        date: paymentStatus === 'paid' 
-          ? (order.metadata?.payment_verified_at 
+        date: paymentStatus === 'paid'
+          ? (order.metadata?.payment_verified_at
             ? new Date(order.metadata.payment_verified_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
             : 'Confirmed')
           : 'Pending',
@@ -169,7 +170,7 @@ function OrderTrackingContent() {
 
   const getStatusBadge = () => {
     if (!order) return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
-    
+
     const statusMap: Record<string, { label: string; color: string }> = {
       'pending': { label: 'Pending', color: 'bg-amber-100 text-amber-800' },
       'processing': { label: 'Processing', color: 'bg-blue-100 text-blue-800' },
@@ -275,7 +276,7 @@ function OrderTrackingContent() {
     <main className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <button 
+          <button
             onClick={() => { setIsTracking(false); setOrder(null); setOrderNumber(''); setEmail(''); }}
             className="text-gray-600 hover:text-gray-900 font-medium inline-flex items-center whitespace-nowrap cursor-pointer"
           >
@@ -348,35 +349,30 @@ function OrderTrackingContent() {
             {trackingSteps.map((step, index) => (
               <div key={step.key} className="flex items-start mb-8 last:mb-0">
                 <div className="relative flex flex-col items-center mr-6">
-                  <div className={`w-12 h-12 flex items-center justify-center rounded-full font-bold transition-colors ${
-                    step.status === 'completed'
+                  <div className={`w-12 h-12 flex items-center justify-center rounded-full font-bold transition-colors ${step.status === 'completed'
                       ? 'bg-blue-700 text-white'
                       : step.status === 'active'
-                      ? 'bg-blue-100 text-blue-700 ring-4 ring-blue-200'
-                      : 'bg-gray-200 text-gray-500'
-                  }`}>
+                        ? 'bg-blue-100 text-blue-700 ring-4 ring-blue-200'
+                        : 'bg-gray-200 text-gray-500'
+                    }`}>
                     <i className={`${step.icon} text-xl`}></i>
                   </div>
                   {index < trackingSteps.length - 1 && (
-                    <div className={`w-0.5 h-16 mt-2 ${
-                      step.status === 'completed' ? 'bg-blue-700' : 'bg-gray-200'
-                    }`}></div>
+                    <div className={`w-0.5 h-16 mt-2 ${step.status === 'completed' ? 'bg-blue-700' : 'bg-gray-200'
+                      }`}></div>
                   )}
                 </div>
                 <div className="flex-1 pt-2">
-                  <h3 className={`font-bold text-lg ${
-                    step.status === 'pending' ? 'text-gray-500' : 'text-gray-900'
-                  }`}>
+                  <h3 className={`font-bold text-lg ${step.status === 'pending' ? 'text-gray-500' : 'text-gray-900'
+                    }`}>
                     {step.title}
                   </h3>
-                  <p className={`text-sm mt-1 ${
-                    step.status === 'pending' ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
+                  <p className={`text-sm mt-1 ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-600'
+                    }`}>
                     {step.description}
                   </p>
-                  <p className={`text-sm mt-1 font-semibold ${
-                    step.status === 'pending' ? 'text-gray-400' : 'text-blue-700'
-                  }`}>
+                  <p className={`text-sm mt-1 font-semibold ${step.status === 'pending' ? 'text-gray-400' : 'text-blue-700'
+                    }`}>
                     {step.date}
                   </p>
                 </div>

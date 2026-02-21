@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
 interface SalesStat {
@@ -23,11 +23,8 @@ export default function ProductSalesStats({ isOpen, onClose }: { isOpen: boolean
     const [stats, setStats] = useState<(Omit<SalesStat, '_orderIds' | 'variants'> & { variants: VariantDisplay[] })[]>([]);
     const [expandedProduct, setExpandedProduct] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (isOpen) fetchStats();
-    }, [isOpen, period]);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         setLoading(true);
 
         // Calculate the start date based on period
@@ -134,7 +131,11 @@ export default function ProductSalesStats({ isOpen, onClose }: { isOpen: boolean
         } finally {
             setLoading(false);
         }
-    };
+    }, [period]);
+
+    useEffect(() => {
+        if (isOpen) fetchStats();
+    }, [isOpen, fetchStats]);
 
     if (!isOpen) return null;
 

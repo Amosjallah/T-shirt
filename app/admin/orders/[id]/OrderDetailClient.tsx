@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import FraudDetectionAlert from '@/components/FraudDetectionAlert';
 
@@ -44,11 +44,8 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
     };
   }, []);
 
-  useEffect(() => {
-    fetchOrderDetails();
-  }, [orderId]);
 
-  const fetchOrderDetails = async () => {
+  const fetchOrderDetails = useCallback(async () => {
     try {
       setLoading(true);
       // Try to fetch by ID or order_number
@@ -118,7 +115,11 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orderId]);
+
+  useEffect(() => {
+    fetchOrderDetails();
+  }, [orderId, fetchOrderDetails]);
 
   const handleUpdateStatus = async (newStatus?: string) => {
     try {

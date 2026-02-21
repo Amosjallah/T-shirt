@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Outfit', 'sans-serif'],
-        serif: ['"Playfair Display"', 'serif'],
-        handwriting: ['Pacifico', 'cursive'],
+        sans: ['var(--font-outfit)', 'sans-serif'],
+        serif: ['var(--font-playfair)', 'serif'],
+        handwriting: ['var(--font-pacifico)', 'cursive'],
       },
       colors: {
         brand: {

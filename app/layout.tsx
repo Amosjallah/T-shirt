@@ -2,7 +2,27 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
+import { Outfit, Playfair_Display, Pacifico } from "next/font/google";
 import "./globals.css";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const pacifico = Pacifico({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pacifico",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -141,9 +161,6 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
           rel="stylesheet"
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
         {/* Structured Data - Organization */}
         <script
@@ -199,7 +216,7 @@ export default function RootLayout({
         />
       )}
 
-      <body className="antialiased font-sans overflow-x-hidden pwa-body">
+      <body className={`${outfit.variable} ${playfair.variable} ${pacifico.variable} antialiased font-sans overflow-x-hidden pwa-body`}>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[10000] focus:px-6 focus:py-3 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:font-semibold focus:shadow-lg"

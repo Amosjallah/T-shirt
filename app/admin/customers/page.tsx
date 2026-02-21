@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminCustomersPage() {
@@ -11,71 +11,31 @@ export default function AdminCustomersPage() {
   const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState('Sort by Join Date');
   const [filterStatus, setFilterStatus] = useState('All Customers');
+  const getInitials = (name: string) => {
+    if (!name) return '??';
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
+  };
 
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
-  const fetchCustomers = async () => {
-    try {
-      setLoading(true);
-
-      // Fetch from new customers table (includes both guests and registered users)
-      const { data: customerData, error: cError } = await supabase
-        .from('customers')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (cError) {
-        // Fallback to old profiles-based approach if customers table doesn't exist yet
-        console.warn('Customers table not available, falling back to profiles');
-        await fetchCustomersFromProfiles();
-        return;
-      }
-
-      if (customerData) {
-        const processed = customerData.map((customer: any) => {
-          // Determine status dynamically
-          let status = 'New';
-          const totalSpent = Number(customer.total_spent) || 0;
-          const totalOrders = customer.total_orders || 0;
-
-          if (totalSpent > 1000) status = 'VIP';
-          else if (totalOrders > 0) status = 'Active';
-          else if (new Date(customer.created_at).getTime() < Date.now() - 30 * 24 * 60 * 60 * 1000) status = 'Inactive';
-
-          const displayName = customer.full_name ||
-            (customer.first_name && customer.last_name ? `${customer.first_name} ${customer.last_name}` : null) ||
-            customer.first_name ||
-            'No Name';
-
-          return {
-            id: customer.id,
-            name: displayName,
-            email: customer.email,
-            phone: customer.phone || 'N/A',
-            avatar: getInitials(displayName !== 'No Name' ? displayName : customer.email),
-            orders: totalOrders,
-            totalSpent: totalSpent,
-            joined: new Date(customer.created_at).toLocaleDateString(),
-            lastOrder: customer.last_order_at ? timeAgo(new Date(customer.last_order_at)) : 'Never',
-            status: status,
-            rawJoined: new Date(customer.created_at),
-            rawLastOrder: customer.last_order_at ? new Date(customer.last_order_at) : null,
-            isGuest: !customer.user_id
-          };
-        });
-        setCustomers(processed);
-      }
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    } finally {
-      setLoading(false);
-    }
+  const timeAgo = (date: Date) => {
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " years ago";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " months ago";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " days ago";
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+    return "Just now";
   };
 
   // Fallback for when customers table doesn't exist
-  const fetchCustomersFromProfiles = async () => {
+  const fetchCustomersFromProfiles = useCallback(async () => {
     try {
       const { data: profiles, error: pError } = await supabase
         .from('profiles')
@@ -181,30 +141,70 @@ export default function AdminCustomersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const getInitials = (name: string) => {
-    if (!name) return '??';
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .slice(0, 2)
-      .join('')
-      .toUpperCase();
-  };
+  const fetchCustomers = useCallback(async () => {
+    try {
+      setLoading(true);
 
-  const timeAgo = (date: Date) => {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-    let interval = seconds / 31536000;
-    if (interval > 1) return Math.floor(interval) + " years ago";
-    interval = seconds / 2592000;
-    if (interval > 1) return Math.floor(interval) + " months ago";
-    interval = seconds / 86400;
-    if (interval > 1) return Math.floor(interval) + " days ago";
-    interval = seconds / 3600;
-    if (interval > 1) return Math.floor(interval) + " hours ago";
-    return "Just now";
-  }
+      // Fetch from new customers table (includes both guests and registered users)
+      const { data: customerData, error: cError } = await supabase
+        .from('customers')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (cError) {
+        // Fallback to old profiles-based approach if customers table doesn't exist yet
+        console.warn('Customers table not available, falling back to profiles');
+        await fetchCustomersFromProfiles();
+        return;
+      }
+
+      if (customerData) {
+        const processed = customerData.map((customer: any) => {
+          // Determine status dynamically
+          let status = 'New';
+          const totalSpent = Number(customer.total_spent) || 0;
+          const totalOrders = customer.total_orders || 0;
+
+          if (totalSpent > 1000) status = 'VIP';
+          else if (totalOrders > 0) status = 'Active';
+          else if (new Date(customer.created_at).getTime() < Date.now() - 30 * 24 * 60 * 60 * 1000) status = 'Inactive';
+
+          const displayName = customer.full_name ||
+            (customer.first_name && customer.last_name ? `${customer.first_name} ${customer.last_name}` : null) ||
+            customer.first_name ||
+            'No Name';
+
+          return {
+            id: customer.id,
+            name: displayName,
+            email: customer.email,
+            phone: customer.phone || 'N/A',
+            avatar: getInitials(displayName !== 'No Name' ? displayName : customer.email),
+            orders: totalOrders,
+            totalSpent: totalSpent,
+            joined: new Date(customer.created_at).toLocaleDateString(),
+            lastOrder: customer.last_order_at ? timeAgo(new Date(customer.last_order_at)) : 'Never',
+            status: status,
+            rawJoined: new Date(customer.created_at),
+            rawLastOrder: customer.last_order_at ? new Date(customer.last_order_at) : null,
+            isGuest: !customer.user_id
+          };
+        });
+        setCustomers(processed);
+      }
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchCustomersFromProfiles]);
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
+
 
   const statusColors: any = {
     'New': 'bg-blue-100 text-blue-700',
