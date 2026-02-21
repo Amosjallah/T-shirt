@@ -138,7 +138,7 @@ function ShopContent() {
 
             return query as any;
           },
-          2 * 60 * 1000 // Cache for 2 minutes
+          30 * 1000 // Cache for 30 seconds
         );
 
         if (error) throw error;

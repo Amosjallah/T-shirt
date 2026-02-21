@@ -21,11 +21,11 @@ export async function cachedQuery<T>(
   ttlMs: number = DEFAULT_TTL
 ): Promise<T> {
   const cached = cache.get(key);
-  
+
   if (cached && (Date.now() - cached.timestamp) < ttlMs) {
     return cached.data;
   }
-  
+
   const data = await queryFn();
   cache.set(key, { data, timestamp: Date.now() });
   return data;
@@ -50,8 +50,16 @@ export function invalidateCachePrefix(prefix: string) {
 }
 
 /**
- * Clear the entire cache
+ * Clear the entire cache and trigger server-side revalidation
  */
-export function clearCache() {
+export async function clearCache() {
   cache.clear();
+
+  // Trigger server-side cache invalidation
+  try {
+    await fetch('/api/admin/revalidate', { method: 'POST' });
+    console.log('[Cache] Triggered server-side revalidation');
+  } catch (err) {
+    console.error('[Cache] Failed to trigger server-side revalidation:', err);
+  }
 }

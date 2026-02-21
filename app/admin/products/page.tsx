@@ -112,6 +112,7 @@ export default function ProductsPage() {
     if (confirm('Are you sure you want to archive this product? it will be hidden from the storefront.')) {
       const { error } = await supabase.from('products').update({ status: 'archived' }).eq('id', productId);
       if (!error) {
+        clearCache();
         setProducts(products.filter((p: any) => p.id !== productId));
         alert('Product archived and hidden successfully');
       } else {
@@ -124,6 +125,7 @@ export default function ProductsPage() {
     if (confirm(`Are you sure you want to archive ${selectedProducts.length} products?`)) {
       const { error } = await supabase.from('products').update({ status: 'archived' }).in('id', selectedProducts);
       if (!error) {
+        clearCache();
         setProducts(products.filter((p: any) => !selectedProducts.includes(p.id)));
         setSelectedProducts([]);
         alert('Products archived successfully');

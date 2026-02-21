@@ -64,6 +64,27 @@ export default function AdminCategoriesPage() {
   const handleDelete = async (categoryId: string) => {
     if (confirm('Are you sure you want to delete this category? This action cannot be undone.')) {
       try {
+        const category = categories.find(c => c.id === categoryId);
+
+        // Cleanup storage image if it exists
+        if (category?.image_url) {
+          try {
+            const url = new URL(category.image_url);
+            const pathParts = url.pathname.split('/');
+            // The path usually looks like /storage/v1/object/public/products/filename.ext
+            // We need 'filename.ext'
+            const fileName = pathParts[pathParts.length - 1];
+
+            if (fileName) {
+              await supabase.storage
+                .from('products')
+                .remove([fileName]);
+            }
+          } catch (e) {
+            console.error('Error cleaning up storage image:', e);
+          }
+        }
+
         const { error } = await supabase.from('categories').delete().eq('id', categoryId);
         if (error) throw error;
         clearCache();

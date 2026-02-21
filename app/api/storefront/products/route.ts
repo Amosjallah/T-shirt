@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { withServerCache } from '@/lib/server-cache';
 
-// Simple in-memory cache
-let cache: { data: any; timestamp: number } | null = null;
-const CACHE_TTL = 10 * 1000; // 10 seconds - products should update quickly after admin changes
+const CACHE_TTL = 30 * 1000; // 30 seconds - products should update quickly after admin changes
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -12,61 +11,42 @@ export async function GET(request: Request) {
     const category = searchParams.get('category');
 
     // Build a cache key from params
-    const cacheKey = `${featured}-${limit}-${category || 'all'}`;
-
-    // Check cache (only for featured/home requests — general shop is more dynamic)
-    if (featured && cache && cache.data?.[cacheKey] && Date.now() - cache.timestamp < CACHE_TTL) {
-        return NextResponse.json(cache.data[cacheKey], {
-            headers: {
-                'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=1800',
-                'X-Cache': 'HIT'
-            }
-        });
-    }
+    const cacheKey = `storefront:products:${featured}-${limit}-${category || 'all'}`;
 
     try {
-        let query = supabase
-            .from('products')
-            .select(`
-                id, name, slug, price, compare_at_price, quantity, description, metadata,
-                categories(id, name, slug),
-                product_images(url, position),
-                product_variants(id, name, price, quantity)
-            `)
-            .order('created_at', { ascending: false });
+        const { data, hit } = await withServerCache(cacheKey, CACHE_TTL, async () => {
+            let query = supabase
+                .from('products')
+                .select(`
+                    id, name, slug, price, compare_at_price, quantity, description, metadata,
+                    categories(id, name, slug),
+                    product_images(url, position),
+                    product_variants(id, name, price, quantity)
+                `)
+                .order('created_at', { ascending: false });
 
-        // Always filter active products
-        query = query.eq('status', 'active');
+            // Always filter active products
+            query = query.eq('status', 'active');
 
-        if (featured) {
-            query = query.eq('featured', true).limit(limit);
-        } else if (category) {
-            // Filter by category slug or name
-            query = query.limit(limit);
-        } else {
-            query = query.limit(limit);
-        }
+            if (featured) {
+                query = query.eq('featured', true).limit(limit);
+            } else {
+                query = query.limit(limit);
+            }
 
-        const { data, error } = await query;
-
-        if (error) {
-            console.error('[Storefront API] Products error:', error);
-            return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
-        }
-
-        // Cache the result
-        if (!cache) cache = { data: {}, timestamp: Date.now() };
-        cache.data[cacheKey] = data;
-        cache.timestamp = Date.now();
+            const { data, error } = await query;
+            if (error) throw error;
+            return data;
+        });
 
         return NextResponse.json(data, {
             headers: {
                 'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=1800',
-                'X-Cache': 'MISS'
+                'X-Cache': hit ? 'HIT' : 'MISS'
             }
         });
     } catch (err: any) {
         console.error('[Storefront API] Error:', err);
-        return NextResponse.json({ error: err.message }, { status: 500 });
+        return NextResponse.json({ error: err.message || 'Failed to fetch products' }, { status: 500 });
     }
 }
