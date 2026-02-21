@@ -109,11 +109,11 @@ export default function ProductsPage() {
   };
 
   const handleDeleteProduct = async (productId: string) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      const { error } = await supabase.from('products').delete().eq('id', productId);
+    if (confirm('Are you sure you want to archive this product? it will be hidden from the storefront.')) {
+      const { error } = await supabase.from('products').update({ status: 'archived' }).eq('id', productId);
       if (!error) {
         setProducts(products.filter((p: any) => p.id !== productId));
-        alert('Product deleted successfully');
+        alert('Product archived and hidden successfully');
       } else {
         alert('Error deleting product');
       }
@@ -121,12 +121,12 @@ export default function ProductsPage() {
   };
 
   const handleBulkDelete = async () => {
-    if (confirm(`Are you sure you want to delete ${selectedProducts.length} products?`)) {
-      const { error } = await supabase.from('products').delete().in('id', selectedProducts);
+    if (confirm(`Are you sure you want to archive ${selectedProducts.length} products?`)) {
+      const { error } = await supabase.from('products').update({ status: 'archived' }).in('id', selectedProducts);
       if (!error) {
         setProducts(products.filter((p: any) => !selectedProducts.includes(p.id)));
         setSelectedProducts([]);
-        alert('Products deleted successfully');
+        alert('Products archived successfully');
       } else {
         alert('Error deleting products');
       }
