@@ -66,10 +66,10 @@ interface CMSContextType {
 }
 
 const defaultSettings: SiteSettings = {
-    site_name: 'MultiMey Supplies',
-    site_tagline: 'Dresses, Electronics, Bags, Shoes & More',
+    site_name: 'BEADEDLUX',
+    site_tagline: 'quality designer ladies bags, handbags & accessories',
     site_logo: '/logo.png',
-    contact_email: 'support@multimeysupplies.com',
+    contact_email: 'support@BEADEDLUXsupplies.com',
     contact_phone: '+233209597443',
     contact_address: 'Accra, Ghana',
     social_facebook: '',
@@ -97,10 +97,10 @@ const CMSContext = createContext<CMSContextType>({
 
 export function CMSProvider({ children }: { children: ReactNode }) {
     const [settings, setSettings] = useState<SiteSettings>({
-        site_name: 'MultiMey Supplies',
-        site_tagline: 'Dresses, Electronics, Bags, Shoes & More',
+        site_name: 'BEADEDLUX',
+        site_tagline: 'quality designer ladies bags, handbags & accessories',
         site_logo: '/logo.png',
-        contact_email: 'info@multimeysupplies.com',
+        contact_email: 'info@BEADEDLUXsupplies.com',
         contact_phone: '+233209597443',
         contact_address: 'Accra, Ghana',
         social_facebook: '',

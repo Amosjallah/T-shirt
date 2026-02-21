@@ -17,7 +17,7 @@ interface SEOProps {
 
 export function generateMetadata({
   title = 'Premium Online Shopping in Ghana',
-  description = 'Shop dresses, electronics, bags, shoes and more at MultiMey Supplies. Locally sourced and imported quality products delivered across Ghana.',
+  description = 'Discover luxury designer ladies bags at BEADEDLUX. Premium handbags, clutches and accessories for the modern woman.. Locally sourced and imported Quality designer bags delivered across Ghana.',
   keywords = [],
   ogImage = 'https://readdy.ai/api/search-image?query=modern%20premium%20ecommerce%20online%20shopping%20platform%20elegant%20design&width=1200&height=630&seq=ogimage&orientation=landscape',
   ogType = 'website',

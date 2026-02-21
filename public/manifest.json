@@ -1,7 +1,7 @@
 {
-  "name": "MultiMey Supplies",
-  "short_name": "MultiMey",
-  "description": "Shop dresses, electronics, bags, shoes and more at MultiMey Supplies. Quality products delivered across Ghana.",
+  "name": "BEADEDLUX",
+  "short_name": "BEADEDLUX",
+  "description": "Discover luxury designer ladies bags at BEADEDLUX. Premium handbags, clutches and accessories for the modern woman. Delivered across Ghana.",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",

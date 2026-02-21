@@ -74,8 +74,8 @@ export default function AnnouncementBar() {
     if (visibleBanners.length === 0) {
         // Show default banner if no custom banners
         return (
-            <div className="bg-blue-800 text-white py-2 text-center text-sm">
-                <p>Free Store Pickup Available | Order Online, Pick Up Today</p>
+            <div className="bg-blue-900 text-white py-2 text-center text-sm font-medium tracking-wide">
+                <p>✨ Free delivery on all luxury bags within Accra — Limited Time Offer!</p>
             </div>
         );
     }

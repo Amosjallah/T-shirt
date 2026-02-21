@@ -88,7 +88,7 @@ export default function ContactPage() {
   };
 
   // Get contact details from CMS settings
-  const contactEmail = getSetting('contact_email') || 'support@multimeysupplies.com';
+  const contactEmail = getSetting('contact_email') || 'support@beadedlux.com';
   const contactPhone = getSetting('contact_phone') || '+233209597443';
   const contactAddress = getSetting('contact_address') || 'Accra, Ghana';
 
@@ -130,7 +130,7 @@ export default function ContactPage() {
   const faqs = [
     {
       question: 'What are your delivery times?',
-      answer: 'Standard delivery takes 2-5 business days within Ghana. Express delivery is available for Accra and Kumasi. We ship dresses, electronics, bags, shoes and all other items with care.'
+      answer: 'Standard delivery takes 2-5 business days within Ghana. Express delivery is available for Accra and Kumasi. We handle every designer piece with extreme care.'
     },
     {
       question: 'Do you offer international shipping?',
@@ -146,7 +146,7 @@ export default function ContactPage() {
     <div className="min-h-screen bg-white">
       <PageHero
         title="Get In Touch"
-        subtitle="Have a question about our dresses, electronics, bags, or shoes? We're here to help from Accra, Ghana."
+        subtitle="Have a question about our curated bag collections? We're here to help from Accra, Ghana."
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

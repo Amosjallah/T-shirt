@@ -22,7 +22,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   },
-  "name": "classy-debbie-collection",
+  "name": "beadedlux",
   "private": true,
   "scripts": {
     "build": "next build",

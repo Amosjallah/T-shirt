@@ -50,7 +50,7 @@ export default function NewsletterSection() {
             </h3>
 
             <p className="text-blue-100/80 text-base leading-relaxed">
-              Be the first to know about new arrivals, restocks, and exclusive deals. From dresses to electronics, we keep you updated on the latest products.
+              Be the first to know about new arrivals, restocks, and exclusive deals. Get early access to our curated designer bag collections.
             </p>
           </div>
 

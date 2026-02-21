@@ -39,13 +39,13 @@ export default function Home() {
     banners?: Array<{ text: string; active: boolean }>;
   } = {
     hero: {
-      headline: 'Dresses, Electronics, Bags & Shoes — Everything You Need, One Store',
-      subheadline: 'Quality products locally sourced and imported directly from China. Unbeatable prices for individuals and resellers across Ghana.',
-      primaryButtonText: 'Shop Collections',
+      headline: 'Quality Designer Ladies Bags — Elegance Delivered to You',
+      subheadline: 'Discover our curated collection of luxury handbags, clutches, and crossbody bags. Locally sourced and handpicked imports for the modern woman across Ghana.',
+      primaryButtonText: 'Shop New Arrivals',
       primaryButtonLink: '/shop',
       secondaryButtonText: 'Our Story',
       secondaryButtonLink: '/about',
-      // backgroundImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop' // Optional override
+      // backgroundImage: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=2070&auto=format&fit=crop' // Optional override
     },
     banners: [
       { text: '🚚 Free delivery on orders over GH₵ 500 within Accra!', active: false },
@@ -126,20 +126,20 @@ export default function Home() {
         {/* Background Slider + Per-Slide Content */}
         {[
           {
-            image: '/hero-1.png',
-            tag: 'Electronics & Appliances',
-            heading: <>Top-Quality <br /><span className="italic font-light">Electronics & Gadgets</span></>,
-            subtext: 'From smart kitchen appliances to everyday electronics — imported directly and priced to move.',
-            cta: { text: 'Shop Electronics', href: '/shop?category=electronics' },
+            image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=2070&auto=format&fit=crop',
+            tag: 'New Collection',
+            heading: <>Timeless <br /><span className="italic font-light">Designer Handbags</span></>,
+            subtext: 'Exquisite designs meeting superior quality. Elevate your style with our latest collection of premium handbags.',
+            cta: { text: 'Shop Handbags', href: '/shop?category=handbags' },
             cta2: { text: 'View All', href: '/shop' },
           },
           {
-            image: '/hero-2.png',
-            tag: 'Fashion & Dresses',
-            heading: <>Stunning African <br /><span className="italic font-light">Print Dresses</span></>,
-            subtext: 'Beautiful locally sourced dresses and fashion pieces — bold prints, perfect fits, unbeatable prices.',
-            cta: { text: 'Shop Dresses', href: '/shop?category=dresses' },
-            cta2: { text: 'All Fashion', href: '/shop?category=fashion' },
+            image: 'https://images.unsplash.com/photo-1566150905458-1bf1fd113961?q=80&w=2070&auto=format&fit=crop',
+            tag: 'Luxury Evening Wear',
+            heading: <>Elegant <br /><span className="italic font-light">Beaded Clutches</span></>,
+            subtext: 'Hand-crafted pieces that add the perfect sparkle to your evening. Sophistication in every stitch.',
+            cta: { text: 'Shop Clutches', href: '/shop?category=clutches' },
+            cta2: { text: 'New Arrivals', href: '/shop' },
           },
         ].map((slide, index) => (
           <div
@@ -240,7 +240,7 @@ export default function Home() {
           <AnimatedSection className="flex items-end justify-between mb-12">
             <div>
               <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-gray-900 mb-4">Shop by Category</h2>
-              <p className="text-gray-600 text-lg max-w-md">From dresses to electronics, bags to shoes</p>
+              <p className="text-gray-600 text-lg max-w-md">Find the perfect bag for every occasion</p>
             </div>
             <Link href="/categories" className="hidden md:flex items-center text-blue-800 font-medium hover:text-blue-900 transition-colors">
               View All <i className="ri-arrow-right-line ml-2"></i>
@@ -261,7 +261,7 @@ export default function Home() {
                   />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                  
+
                   {/* Content */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end h-full">
                     <h3 className="font-serif font-bold text-white text-xl md:text-2xl mb-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">{category.name}</h3>

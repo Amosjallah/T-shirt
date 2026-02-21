@@ -201,7 +201,7 @@ function ShopContent() {
     <main className="min-h-screen bg-white">
       <PageHero
         title="Shop All Products"
-        subtitle="Browse our range of dresses, electronics, bags, shoes and more"
+        subtitle="Browse our range of quality designer ladies bags, handbags and accessories"
       />
 
       {/* Mobile Filter Toggle */}

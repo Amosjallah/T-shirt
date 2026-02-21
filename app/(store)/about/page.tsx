@@ -11,7 +11,7 @@ export default function AboutPage() {
   const { getSetting } = useCMS();
   const [activeTab, setActiveTab] = useState('story');
 
-  const siteName = getSetting('site_name') || 'MultiMey Supplies';
+  const siteName = getSetting('site_name') || 'BEADEDLUX';
 
   const values = [
     {
@@ -27,7 +27,7 @@ export default function AboutPage() {
     {
       icon: 'ri-global-line',
       title: 'Local & Imported',
-      description: 'The best of both worlds — handpicked local products alongside carefully selected imports from trusted Chinese suppliers.'
+      description: 'The best of both worlds — hand-crafted local designs alongside premium imports carefully selected from trusted international suppliers.'
     },
     {
       icon: 'ri-truck-line',
@@ -40,7 +40,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-white">
       <PageHero
         title="More Than Just A Brand"
-        subtitle="From Accra to your doorstep — quality dresses, electronics, bags, shoes and more at prices that make sense."
+        subtitle="From Accra to your doorstep — quality quality designer ladies bags, handbags and accessories at prices that make sense."
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -71,13 +71,13 @@ export default function AboutPage() {
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">How It All Started</h2>
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
                 <p>
-                  <strong>MultiMey Supplies</strong> started with a simple idea: bring quality products to Ghanaians at fair prices. We saw how people were paying too much for items that could be sourced smarter — so we built a bridge between trusted Chinese manufacturers, local suppliers, and everyday shoppers.
+                  <strong>BEADEDLUX</strong> started with a simple idea: bring world-class designer bags to Ghanaians at fair prices. We saw a gap in the market for quality luxury handbags that were both authentic and accessible — so we set out to bridge that gap.
                 </p>
                 <p>
-                  What began as a small operation in Accra has grown into a full online store offering everything from trendy dresses and stylish bags to the latest electronics and durable shoes. We handpick every product, test it for quality, and price it fairly.
+                  What began as a passion for fashion in Accra has grown into a premier destination for exquisite ladies' bags. From sophisticated handbags and statement clutches to versatile crossbody bags, every piece in our collection is chosen for its superior craftsmanship and timeless design.
                 </p>
                 <p>
-                  Whether you are shopping for yourself, stocking your boutique, or looking for the perfect gift, <strong>MultiMey Supplies</strong> has you covered. We combine local sourcing with direct imports to give you the widest selection at the best value.
+                  Whether you are looking for the perfect finishing touch for an evening gown or a durable yet stylish tote for daily use, <strong>BEADEDLUX</strong> offers a curated selection that celebrates femininity and elegance. We combine the best of local artistry with premium international imports to bring you luxury that lasts.
                 </p>
               </div>
             </div>
@@ -85,11 +85,11 @@ export default function AboutPage() {
               <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-gray-100 relative flex items-center justify-center">
                 <img
                   src="/logo.png"
-                  alt="MultiMey Supplies"
+                  alt="BEADEDLUX"
                   className="w-2/3 h-auto object-contain opacity-80"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-8">
-                  <p className="text-white font-bold text-xl">MultiMey Supplies</p>
+                  <p className="text-white font-bold text-xl">BEADEDLUX</p>
                   <p className="text-blue-200">Founder & CEO</p>
                 </div>
               </div>
@@ -105,9 +105,9 @@ export default function AboutPage() {
               <div className="w-16 h-16 bg-blue-700 rounded-2xl flex items-center justify-center mb-8 shadow-lg">
                 <i className="ri-store-2-line text-3xl text-white"></i>
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">Everything in One Place</h3>
+              <h3 className="text-3xl font-bold text-gray-900 mb-4">Quality Over Everything</h3>
               <p className="text-gray-600 text-lg leading-relaxed">
-                From fashion to electronics, bags to shoes — we aim to be the only store you need. Our catalogue is constantly expanding with new arrivals sourced from trusted local and international suppliers.
+                We believe a bag is more than an accessory; it's an investment in your style. Our mission is to provide high-quality, durable, and beautiful bags that stand the test of time, without the traditional luxury markup.
               </p>
             </div>
             <div className="bg-amber-50 p-10 rounded-3xl border border-amber-100">
@@ -149,7 +149,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <h2 className="text-4xl md:text-5xl font-bold mb-8">Ready to shop smarter?</h2>
           <p className="text-xl text-blue-100 mb-10 leading-relaxed max-w-2xl mx-auto">
-            Browse our collection of dresses, electronics, bags, shoes and more. New stock arrives weekly.
+            Browse our collection of quality designer ladies bags, handbags and accessories. New stock arrives weekly.
           </p>
           <Link
             href="/shop"

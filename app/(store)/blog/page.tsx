@@ -25,8 +25,8 @@ export default function BlogPage() {
     },
     {
       id: '3',
-      title: 'How to Choose Quality Products: A Buyer\'s Guide',
-      excerpt: 'Learn the key indicators of quality products and how to make informed purchasing decisions that offer the best value for your money.',
+      title: 'How to Choose Quality designer bags: A Buyer\'s Guide',
+      excerpt: 'Learn the key indicators of Quality designer bags and how to make informed purchasing decisions that offer the best value for your money.',
       image: 'https://readdy.ai/api/search-image?query=Person%20examining%20product%20quality%20checking%20labels%20and%20details%20in%20bright%20retail%20setting%20closeup%20hands%20inspecting%20merchandise%20professional%20photography%20clean%20background&width=800&height=500&seq=blog3&orientation=landscape',
       category: 'Buying Guide',
       date: 'December 10, 2024',
@@ -239,7 +239,7 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-4">Ready to Start Shopping?</h2>
           <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-            Browse our range of dresses, electronics, bags, shoes and more
+            Browse our range of quality designer ladies bags, handbags and accessories
           </p>
           <Link
             href="/shop"
