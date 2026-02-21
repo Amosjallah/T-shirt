@@ -134,7 +134,7 @@ export default function Home() {
             cta2: { text: 'View All', href: '/shop' },
           },
           {
-            image: 'https://images.unsplash.com/photo-1566150905458-1bf1fd113961?q=80&w=2070&auto=format&fit=crop',
+            image: 'https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=2070&auto=format&fit=crop',
             tag: 'Luxury Evening Wear',
             heading: <>Elegant <br /><span className="italic font-light">Beaded Clutches</span></>,
             subtext: 'Hand-crafted pieces that add the perfect sparkle to your evening. Sophistication in every stitch.',

@@ -16,7 +16,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.beadedlux.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "BEADEDLUX | Quality Designer Ladies Bags",
+    default: "BEADEDLUX by Engel | Quality Designer Ladies Bags",
     template: "%s | BEADEDLUX"
   },
   description: "Discover luxury designer ladies bags at BEADEDLUX. Premium handbags, clutches and accessories for the modern woman. Delivered across Ghana.",
