@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
-interface Module {
+export interface Module {
   id: string;
   name: string;
   description: string;
@@ -12,6 +12,7 @@ interface Module {
   enabled: boolean;
   category: string;
 }
+
 
 const colorMap: Record<string, string> = {
   red: 'bg-red-100 text-red-600',
@@ -117,7 +118,7 @@ export default function ModulesPage() {
       if (error) throw error;
 
       if (data) {
-        setModules(prev => prev.map(m => {
+        setModules(prev => prev.map((m: Module) => {
           const dbState = data.find((d: any) => d.id === m.id);
           return dbState ? { ...m, enabled: dbState.enabled } : m;
         }));
@@ -133,7 +134,7 @@ export default function ModulesPage() {
     const newState = !currentState;
 
     // Optimistic Update
-    setModules(modules.map(m =>
+    setModules(modules.map((m: Module) =>
       m.id === id ? { ...m, enabled: newState } : m
     ));
 
@@ -154,7 +155,7 @@ export default function ModulesPage() {
     }
   };
 
-  const categories = ['all', ...Array.from(new Set(modules.map(m => m.category)))];
+  const categories = ['all', ...Array.from(new Set(modules.map((m: Module) => m.category)))];
 
   /* Lock Screen Logic */
   const [isLocked, setIsLocked] = useState(true);
@@ -212,14 +213,14 @@ export default function ModulesPage() {
     );
   }
 
-  const filteredModules = modules.filter(module => {
+  const filteredModules = modules.filter((module: Module) => {
     const matchesSearch = module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       module.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === 'all' || module.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const groupedModules = filteredModules.reduce((acc, module) => {
+  const groupedModules = filteredModules.reduce((acc: any, module: Module) => {
     if (!acc[module.category]) {
       acc[module.category] = [];
     }
@@ -250,7 +251,7 @@ export default function ModulesPage() {
               onChange={(e) => setFilterCategory(e.target.value)}
               className="p-2 border border-gray-300 rounded-lg outline-none"
             >
-              {categories.map(c => <option key={c} value={c}>{c === 'all' ? 'All Categories' : c}</option>)}
+              {categories.map((c: string) => <option key={c} value={c}>{c === 'all' ? 'All Categories' : c}</option>)}
             </select>
           </div>
         </div>
@@ -259,11 +260,11 @@ export default function ModulesPage() {
           <div className="text-center py-12">Loading modules...</div>
         ) : (
           <div className="space-y-10">
-            {Object.entries(groupedModules).map(([category, items]) => (
+            {Object.entries(groupedModules).map(([category, items]: [string, any]) => (
               <div key={category}>
                 <h2 className="text-xl font-bold text-gray-800 mb-4 border-l-4 border-blue-500 pl-3">{category}</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {items.map(module => (
+                  {items.map((module: Module) => (
                     <div key={module.id} className={`bg-white rounded-xl border-2 p-6 transition-all ${module.enabled ? 'border-blue-500 shadow-md' : 'border-gray-200 opacity-75'}`}>
                       <div className="flex justify-between items-start mb-4">
                         <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${colorMap[module.color] || 'bg-gray-100 text-gray-600'}`}>

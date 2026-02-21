@@ -66,7 +66,7 @@ export default function InventoryManagementPage() {
     }
   };
 
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products.filter((product: any) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.sku.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = stockFilter === 'all' ||
@@ -76,13 +76,13 @@ export default function InventoryManagementPage() {
     return matchesSearch && matchesFilter;
   });
 
-  const lowStockCount = products.filter(p => p.status === 'low').length;
-  const outOfStockCount = products.filter(p => p.status === 'out').length;
-  const totalValue = products.reduce((sum, p) => sum + (p.currentStock * p.price), 0); // Using Price as Value
+  const lowStockCount = products.filter((p: any) => p.status === 'low').length;
+  const outOfStockCount = products.filter((p: any) => p.status === 'out').length;
+  const totalValue = products.reduce((sum: number, p: any) => sum + (p.currentStock * p.price), 0); // Using Price as Value
 
   const toggleProductSelection = (id: string) => {
     setSelectedProducts(prev =>
-      prev.includes(id) ? prev.filter(pid => pid !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((pid: string) => pid !== id) : [...prev, id]
     );
   };
 
@@ -90,7 +90,7 @@ export default function InventoryManagementPage() {
     if (selectedProducts.length === filteredProducts.length) {
       setSelectedProducts([]);
     } else {
-      setSelectedProducts(filteredProducts.map(p => p.id));
+      setSelectedProducts(filteredProducts.map((p: any) => p.id));
     }
   };
 
@@ -103,7 +103,7 @@ export default function InventoryManagementPage() {
   const handleExportCSV = () => {
     const csvData = [
       ['SKU', 'Product Name', 'Category', 'Current Stock', 'Price', 'Status'],
-      ...products.map(p => [
+      ...products.map((p: any) => [
         p.sku,
         p.name,
         p.category,
@@ -113,7 +113,7 @@ export default function InventoryManagementPage() {
       ])
     ];
 
-    const csvContent = csvData.map(row => row.join(',')).join('\n');
+    const csvContent = csvData.map((row: string[]) => row.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -206,7 +206,7 @@ export default function InventoryManagementPage() {
 
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
-                {['all', 'low', 'out', 'good'].map((filter) => (
+                {['all', 'low', 'out', 'good'].map((filter: string) => (
                   <button
                     key={filter}
                     onClick={() => setStockFilter(filter)}
@@ -292,7 +292,7 @@ export default function InventoryManagementPage() {
                 ) : filteredProducts.length === 0 ? (
                   <tr><td colSpan={8} className="p-10 text-center text-gray-500">No products found.</td></tr>
                 ) : (
-                  filteredProducts.map((product) => (
+                  filteredProducts.map((product: any) => (
                     <tr key={product.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <input

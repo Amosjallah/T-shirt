@@ -95,7 +95,7 @@ export default function AdminOrdersPage() {
 
       // Extract unique product names for filter
       const productNames = new Set<string>();
-      ordersData?.forEach(o => {
+      ordersData?.forEach((o: any) => {
         o.order_items?.forEach((item: any) => {
           if (item.product_name) productNames.add(item.product_name);
         });
@@ -103,20 +103,20 @@ export default function AdminOrdersPage() {
       setAvailableProducts(Array.from(productNames).sort());
 
       // Separate confirmed (paid) from abandoned (pending payment)
-      const confirmedOrders = ordersData?.filter(o => o.payment_status === 'paid') || [];
-      const abandonedOrders = ordersData?.filter(o => o.payment_status !== 'paid') || [];
-      
+      const confirmedOrders = ordersData?.filter((o: any) => o.payment_status === 'paid') || [];
+      const abandonedOrders = ordersData?.filter((o: any) => o.payment_status !== 'paid') || [];
+
       setConfirmedCount(confirmedOrders.length);
       setAbandonedCount(abandonedOrders.length);
 
       // Calculate stats based on confirmed orders only
       const stats = [
         { label: 'All Orders', count: confirmedOrders.length, status: 'all' },
-        { label: 'Pending', count: confirmedOrders.filter(o => o.status === 'pending').length, status: 'pending' },
-        { label: 'Processing', count: confirmedOrders.filter(o => o.status === 'processing').length, status: 'processing' },
-        { label: 'Packaged', count: confirmedOrders.filter(o => o.status === 'shipped').length, status: 'shipped' },
-        { label: 'Delivered', count: confirmedOrders.filter(o => o.status === 'delivered').length, status: 'delivered' },
-        { label: 'Cancelled', count: confirmedOrders.filter(o => o.status === 'cancelled').length, status: 'cancelled' }
+        { label: 'Pending', count: confirmedOrders.filter((o: any) => o.status === 'pending').length, status: 'pending' },
+        { label: 'Processing', count: confirmedOrders.filter((o: any) => o.status === 'processing').length, status: 'processing' },
+        { label: 'Packaged', count: confirmedOrders.filter((o: any) => o.status === 'shipped').length, status: 'shipped' },
+        { label: 'Delivered', count: confirmedOrders.filter((o: any) => o.status === 'delivered').length, status: 'delivered' },
+        { label: 'Cancelled', count: confirmedOrders.filter((o: any) => o.status === 'cancelled').length, status: 'cancelled' }
       ];
       setOrderStats(stats);
 
@@ -178,7 +178,7 @@ export default function AdminOrdersPage() {
 
   const getItemCount = (order: Order) => {
     if (!order.order_items) return 0;
-    return order.order_items.reduce((sum, item) => sum + item.quantity, 0);
+    return order.order_items.reduce((sum: number, item: any) => sum + item.quantity, 0);
   };
 
   const formatDate = (dateString: string) => {
@@ -197,13 +197,13 @@ export default function AdminOrdersPage() {
     if (selectedOrders.length === filteredOrders.length) {
       setSelectedOrders([]);
     } else {
-      setSelectedOrders(filteredOrders.map(o => o.id));
+      setSelectedOrders(filteredOrders.map((o: any) => o.id));
     }
   };
 
   const handleSelectOrder = (orderId: string) => {
     if (selectedOrders.includes(orderId)) {
-      setSelectedOrders(selectedOrders.filter(id => id !== orderId));
+      setSelectedOrders(selectedOrders.filter((id: string) => id !== orderId));
     } else {
       setSelectedOrders([...selectedOrders, orderId]);
     }
@@ -224,12 +224,12 @@ export default function AdminOrdersPage() {
         // Send Notifications with auth token
         const { data: { session } } = await supabase.auth.getSession();
         const authToken = session?.access_token;
-        
-        const updatedOrders = orders.filter(o => selectedOrders.includes(o.id));
+
+        const updatedOrders = orders.filter((o: any) => selectedOrders.includes(o.id));
         updatedOrders.forEach(order => {
           fetch('/api/notifications', {
             method: 'POST',
-            headers: { 
+            headers: {
               'Content-Type': 'application/json',
               ...(authToken && { 'Authorization': `Bearer ${authToken}` })
             },
@@ -248,8 +248,8 @@ export default function AdminOrdersPage() {
         alert('Failed to update orders');
       }
     } else if (action === 'Export') {
-      const ordersToExport = orders.filter(o => selectedOrders.includes(o.id));
-      const csvContent = `Order ID,Customer,Email,Date,Items,Total,Status,Payment\n${ordersToExport.map(o =>
+      const ordersToExport = orders.filter((o: any) => selectedOrders.includes(o.id));
+      const csvContent = `Order ID,Customer,Email,Date,Items,Total,Status,Payment\n${ordersToExport.map((o: any) =>
         `${o.order_number || o.id},${getCustomerName(o)},${getCustomerEmail(o)},${formatDate(o.created_at)},${getItemCount(o)},${o.total},${o.status},${o.payment_method || 'N/A'}`
       ).join('\n')}`;
       const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -294,9 +294,9 @@ export default function AdminOrdersPage() {
           payload: order
         })
       });
-      
+
       if (!response.ok) throw new Error('Failed to send');
-      
+
       alert(`Payment link sent to ${order.phone || order.email}`);
     } catch (error) {
       console.error('Error sending payment link:', error);
@@ -306,7 +306,7 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = orders.filter((order: any) => {
     const customerName = getCustomerName(order).toLowerCase();
     const customerEmail = getCustomerEmail(order).toLowerCase();
     const orderId = (order.order_number || order.id).toLowerCase();
@@ -319,7 +319,7 @@ export default function AdminOrdersPage() {
       customerName.includes(searchQuery.toLowerCase()) ||
       customerEmail.includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
-    const matchesProduct = productFilter === 'all' || 
+    const matchesProduct = productFilter === 'all' ||
       order.order_items?.some((item: any) => item.product_name === productFilter);
     return matchesViewTab && matchesSearch && matchesStatus && matchesProduct;
   });
@@ -353,22 +353,20 @@ export default function AdminOrdersPage() {
       <div className="flex border-b border-gray-200">
         <button
           onClick={() => { setOrderViewTab('confirmed'); setStatusFilter('all'); }}
-          className={`px-6 py-3 font-semibold text-sm border-b-2 transition-colors cursor-pointer ${
-            orderViewTab === 'confirmed'
-              ? 'border-blue-700 text-blue-700'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
-          }`}
+          className={`px-6 py-3 font-semibold text-sm border-b-2 transition-colors cursor-pointer ${orderViewTab === 'confirmed'
+            ? 'border-blue-700 text-blue-700'
+            : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
         >
           <i className="ri-check-double-line mr-2"></i>
           Confirmed Orders ({confirmedCount})
         </button>
         <button
           onClick={() => { setOrderViewTab('abandoned'); setStatusFilter('all'); }}
-          className={`px-6 py-3 font-semibold text-sm border-b-2 transition-colors cursor-pointer ${
-            orderViewTab === 'abandoned'
-              ? 'border-amber-600 text-amber-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
-          }`}
+          className={`px-6 py-3 font-semibold text-sm border-b-2 transition-colors cursor-pointer ${orderViewTab === 'abandoned'
+            ? 'border-amber-600 text-amber-600'
+            : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
         >
           <i className="ri-shopping-cart-2-line mr-2"></i>
           Abandoned Carts ({abandonedCount})
@@ -376,21 +374,21 @@ export default function AdminOrdersPage() {
       </div>
 
       {orderViewTab === 'confirmed' && (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {orderStats.map((stat) => (
-          <button
-            key={stat.status}
-            onClick={() => setStatusFilter(stat.status)}
-            className={`p-4 rounded-xl border-2 transition-all text-left cursor-pointer ${statusFilter === stat.status
-              ? 'border-blue-700 bg-blue-50'
-              : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-          >
-            <p className="text-2xl font-bold text-gray-900">{stat.count}</p>
-            <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
-          </button>
-        ))}
-      </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {orderStats.map((stat) => (
+            <button
+              key={stat.status}
+              onClick={() => setStatusFilter(stat.status)}
+              className={`p-4 rounded-xl border-2 transition-all text-left cursor-pointer ${statusFilter === stat.status
+                ? 'border-blue-700 bg-blue-50'
+                : 'border-gray-200 bg-white hover:border-gray-300'
+                }`}
+            >
+              <p className="text-2xl font-bold text-gray-900">{stat.count}</p>
+              <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
+            </button>
+          ))}
+        </div>
       )}
 
       {/* Abandoned carts info banner */}

@@ -9,8 +9,11 @@ export async function generateStaticParams() {
   ];
 }
 
-export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function BlogPostPage(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { id } = await props.params;
 
   const posts: any = {
     '1': {

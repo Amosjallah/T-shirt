@@ -28,7 +28,7 @@ export default async function CategoriesPage() {
     { color: 'from-indigo-500 to-indigo-700', icon: 'ri-star-smile-line' },
   ];
 
-  const categories = categoriesData?.map((c, i) => {
+  const categories = categoriesData?.map((c: any, i: number) => {
     const style = palette[i % palette.length];
     return {
       ...c,
@@ -50,7 +50,7 @@ export default async function CategoriesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {categories.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category) => (
+            {categories.map((category: any) => (
               <Link
                 key={category.id}
                 href={`/shop?category=${category.slug}`}

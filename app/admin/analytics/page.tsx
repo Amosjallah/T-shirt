@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
 
       let validItems: any[] = [];
       if (orders && orders.length > 0) {
-        const orderIds = orders.map(o => o.id);
+        const orderIds = orders.map((o: any) => o.id);
         const { data: fetchedItems, error: itemFetchError } = await supabase
           .from('order_items')
           .select(`
@@ -88,7 +88,7 @@ export default function AnalyticsPage() {
       }
 
       // Process Metrics
-      const totalRevenue = orders?.reduce((sum, o) => sum + (o.total || 0), 0) || 0;
+      const totalRevenue = orders?.reduce((sum: number, o: any) => sum + (o.total || 0), 0) || 0;
       const totalOrders = orders?.length || 0;
       const aov = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
@@ -120,7 +120,7 @@ export default function AnalyticsPage() {
         d.setDate(d.getDate() + 1);
       }
 
-      orders?.forEach(o => {
+      orders?.forEach((o: any) => {
         const dateKey = new Date(o.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         if (salesMap[dateKey]) {
           salesMap[dateKey].sales += o.total || 0;
@@ -283,12 +283,13 @@ export default function AnalyticsPage() {
                       outerRadius={80}
                       paddingAngle={5}
                       dataKey="value"
+                      label={({ name, percent }: any) => `${name || 'Other'} ${(percent * 100).toFixed(0)}%`}
                     >
-                      {categoryRevenue.map((entry, index) => (
+                      {categoryRevenue.map((entry: any, index: number) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip formatter={(value: any) => [`GH₵ ${Number(value || 0).toLocaleString()}`, 'Revenue']} />
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
@@ -309,7 +310,7 @@ export default function AnalyticsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {topProducts.map((product, index) => (
+                  {topProducts.map((product: any, index: number) => (
                     <tr key={index}>
                       <td className="py-3 text-sm font-medium text-gray-900">{product.name}</td>
                       <td className="py-3 text-right text-sm text-gray-600">{product.units}</td>

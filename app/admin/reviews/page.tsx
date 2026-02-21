@@ -62,21 +62,21 @@ export default function AdminReviewsPage() {
     return name
       .replace(/[^a-zA-Z ]/g, '')
       .split(' ')
-      .map(n => n?.[0])
+      .map((n: any) => n?.[0])
       .slice(0, 2)
       .join('')
       .toUpperCase() || '??';
   };
 
-  const filteredReviews = reviews.filter(r =>
+  const filteredReviews = reviews.filter((r: any) =>
     statusFilter === 'all' || r.status.toLowerCase() === statusFilter
   );
 
   const stats = {
     total: reviews.length,
-    pending: reviews.filter(r => r.status.toLowerCase() === 'pending').length,
-    approved: reviews.filter(r => r.status.toLowerCase() === 'approved').length,
-    rejected: reviews.filter(r => r.status.toLowerCase() === 'rejected').length
+    pending: reviews.filter((r: any) => r.status.toLowerCase() === 'pending').length,
+    approved: reviews.filter((r: any) => r.status.toLowerCase() === 'approved').length,
+    rejected: reviews.filter((r: any) => r.status.toLowerCase() === 'rejected').length
   };
 
   const statusColors: any = {
@@ -89,13 +89,13 @@ export default function AdminReviewsPage() {
     if (selectedReviews.length === filteredReviews.length) {
       setSelectedReviews([]);
     } else {
-      setSelectedReviews(filteredReviews.map(r => r.id));
+      setSelectedReviews(filteredReviews.map((r: any) => r.id));
     }
   };
 
   const handleSelectReview = (reviewId: string) => {
     if (selectedReviews.includes(reviewId)) {
-      setSelectedReviews(selectedReviews.filter(id => id !== reviewId));
+      setSelectedReviews(selectedReviews.filter((id: string) => id !== reviewId));
     } else {
       setSelectedReviews([...selectedReviews, reviewId]);
     }
@@ -244,7 +244,7 @@ export default function AdminReviewsPage() {
               ) : filteredReviews.length === 0 ? (
                 <tr><td colSpan={6} className="p-8 text-center text-gray-500">No reviews found in this category.</td></tr>
               ) : (
-                filteredReviews.map((review) => (
+                filteredReviews.map((review: any) => (
                   <tr key={review.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6">
                       <input

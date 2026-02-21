@@ -90,7 +90,7 @@ export default function POSPage() {
                 setProducts(formatted);
 
                 // Extract Categories
-                const cats = Array.from(new Set(formatted.map(p => p.category))).sort();
+                const cats = Array.from(new Set(formatted.map((p: Product) => p.category))).sort();
                 setCategories(['All', ...cats]);
             }
 
@@ -115,7 +115,7 @@ export default function POSPage() {
         setCart(prev => {
             const existing = prev.find(item => item.id === product.id);
             if (existing) {
-                return prev.map(item =>
+                return prev.map((item: CartItem) =>
                     item.id === product.id
                         ? { ...item, cartQuantity: item.cartQuantity + 1 }
                         : item
@@ -126,11 +126,11 @@ export default function POSPage() {
     };
 
     const removeFromCart = (productId: string) => {
-        setCart(prev => prev.filter(item => item.id !== productId));
+        setCart(prev => prev.filter((item: CartItem) => item.id !== productId));
     };
 
     const updateQuantity = (productId: string, delta: number) => {
-        setCart(prev => prev.map(item => {
+        setCart(prev => prev.map((item: CartItem) => {
             if (item.id === productId) {
                 const newQty = item.cartQuantity + delta;
                 return newQty > 0 ? { ...item, cartQuantity: newQty } : item;
@@ -143,7 +143,7 @@ export default function POSPage() {
 
     // Computed
     const filteredProducts = useMemo(() => {
-        return products.filter(p => {
+        return products.filter((p: Product) => {
             const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 p.sku?.toLowerCase().includes(searchQuery.toLowerCase());
             const matchesCat = activeCategory === 'All' || p.category === activeCategory;
@@ -155,14 +155,14 @@ export default function POSPage() {
     const filteredCustomers = useMemo(() => {
         if (!customerSearch.trim()) return customers;
         const q = customerSearch.toLowerCase();
-        return customers.filter(c =>
+        return customers.filter((c: Customer) =>
             c.full_name?.toLowerCase().includes(q) ||
             c.email?.toLowerCase().includes(q) ||
             c.phone?.includes(q)
         );
     }, [customers, customerSearch]);
 
-    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.cartQuantity), 0);
+    const cartTotal = cart.reduce((sum: number, item: CartItem) => sum + (item.price * item.cartQuantity), 0);
     const tax = cartTotal * 0.0;
     const grandTotal = cartTotal + tax;
     const changeDue = amountTendered ? (parseFloat(amountTendered) - grandTotal) : 0;
@@ -287,7 +287,7 @@ export default function POSPage() {
             if (orderError) throw orderError;
 
             // 2. Create Order Items (with product_name, unit_price, total_price)
-            const orderItems = cart.map(item => ({
+            const orderItems = cart.map((item: CartItem) => ({
                 order_id: order.id,
                 product_id: item.id,
                 product_name: item.name,
@@ -324,7 +324,7 @@ export default function POSPage() {
                     });
                     // Refresh customer list silently
                     supabase.from('customers').select('id, full_name, email, phone').order('full_name').limit(200)
-                        .then(({ data }) => { if (data) setCustomers(data); });
+                        .then(({ data }: any) => { if (data) setCustomers(data); });
                 } catch (custErr) {
                     console.error('Customer upsert error (non-fatal):', custErr);
                 }

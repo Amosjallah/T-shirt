@@ -61,8 +61,8 @@ export default function AdminDashboard() {
         if (ordersError) throw ordersError;
 
         // Only count PAID orders for revenue & avg order value
-        const paidOrders = allOrdersData?.filter(o => o.payment_status === 'paid') || [];
-        const totalRevenue = paidOrders.reduce((sum, order) => sum + (order.total || 0), 0);
+        const paidOrders = allOrdersData?.filter((o: any) => o.payment_status === 'paid') || [];
+        const totalRevenue = paidOrders.reduce((sum: number, order: any) => sum + (order.total || 0), 0);
         const totalOrders = allOrdersData?.length || 0;
         const paidOrderCount = paidOrders.length;
         const avgOrderValue = paidOrderCount > 0 ? totalRevenue / paidOrderCount : 0;
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
         // Since we can't query auth.users directly from client, we'll estimate active customers via orders or just keep it 0 if we can't.
         // Actually, best to just show "Orders" or "Recent Signups" if we had a public profiles table.
         // We'll use unique emails from orders as a proxy for "Customers"
-        const uniqueCustomers = new Set(allOrdersData?.map(o => o.email)).size;
+        const uniqueCustomers = new Set(allOrdersData?.map((o: any) => o.email)).size;
 
 
         // Process Chart Data (Last 7 Days) - only count PAID orders as revenue
@@ -81,19 +81,19 @@ export default function AdminDashboard() {
           return d.toISOString().split('T')[0];
         });
 
-        const chartMap = last7Days.reduce((acc: any, date) => {
+        const chartMap = last7Days.reduce((acc: any, date: string) => {
           acc[date] = 0;
           return acc;
         }, {});
 
-        paidOrders.forEach(order => {
+        paidOrders.forEach((order: any) => {
           const date = new Date(order.created_at).toISOString().split('T')[0];
           if (chartMap[date] !== undefined) {
             chartMap[date] += (order.total || 0);
           }
         });
 
-        const processedChartData = Object.keys(chartMap).map(date => ({
+        const processedChartData = Object.keys(chartMap).map((date: any) => ({
           date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
           revenue: chartMap[date]
         }));
@@ -244,7 +244,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat) => (
+          {stats.map((stat: any) => (
             <div key={stat.title} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between mb-4">
                 <div className={`w-12 h-12 flex items-center justify-center bg-${stat.color}-100 text-${stat.color}-700 rounded-lg`}>
@@ -259,6 +259,7 @@ export default function AdminDashboard() {
             </div>
           ))}
         </div>
+
 
         {/* Revenue Chart & Quick Actions */}
         <div className="grid lg:grid-cols-3 gap-6 mb-8">
@@ -354,7 +355,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {recentOrders.map((order) => (
+                    {recentOrders.map((order: any) => (
                       <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="py-4 px-4">
                           <Link href={`/admin/orders/${order.id}`} className="text-blue-700 hover:text-blue-800 font-medium whitespace-nowrap cursor-pointer">
@@ -387,7 +388,7 @@ export default function AdminDashboard() {
                 <p className="text-gray-500">Inventory looks good!</p>
               ) : (
                 <div className="space-y-3">
-                  {lowStockProducts.map((product, index) => (
+                  {lowStockProducts.map((product: any, index: number) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex-1">
                         <p className="font-medium text-gray-900 text-sm truncate pr-2">{product.name}</p>
@@ -417,7 +418,7 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {topProducts.map((product) => (
+            {topProducts.map((product: any) => (
               <div key={product.id} className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
                 <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-3">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover" />

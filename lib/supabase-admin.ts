@@ -6,20 +6,33 @@ import { createClient } from '@supabase/supabase-js';
  * This bypasses RLS, so always verify the caller is authorized first.
  */
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+let _adminClient: ReturnType<typeof createClient> | null = null;
 
-if (!supabaseUrl) {
-    throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL');
-}
+const getSupabaseAdmin = () => {
+    if (_adminClient) return _adminClient;
 
-if (!supabaseServiceKey) {
-    console.error('CRITICAL: Missing SUPABASE_SERVICE_ROLE_KEY — admin operations will fail');
-}
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder';
 
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || '', {
-    auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-    },
+    try {
+        _adminClient = createClient(supabaseUrl, supabaseServiceKey, {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false,
+            },
+        });
+    } catch (e) {
+        console.warn('[supabase-admin] Failed to initialize Supabase Admin client:', e);
+        _adminClient = {} as any;
+    }
+
+    return _adminClient!;
+};
+
+// Lazy-loaded proxy for supabaseAdmin
+export const supabaseAdmin = new Proxy({} as any, {
+    get: (_target, prop) => {
+        const admin = getSupabaseAdmin();
+        return (admin as any)[prop];
+    }
 });

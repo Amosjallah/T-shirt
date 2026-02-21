@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
+const IDLE_TIMEOUT = 25 * 60 * 1000;
+const WARNING_TIME = 60 * 1000;
+
 export default function SessionTimeoutWarning() {
   const [showWarning, setShowWarning] = useState(false);
   const [countdown, setCountdown] = useState(60);
   const [lastActivity, setLastActivity] = useState(Date.now());
-
-  const IDLE_TIMEOUT = 25 * 60 * 1000;
-  const WARNING_TIME = 60 * 1000;
 
   useEffect(() => {
     const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart'];
@@ -25,7 +25,7 @@ export default function SessionTimeoutWarning() {
 
     const checkInterval = setInterval(() => {
       const timeSinceActivity = Date.now() - lastActivity;
-      
+
       if (timeSinceActivity >= IDLE_TIMEOUT) {
         handleLogout();
       } else if (timeSinceActivity >= IDLE_TIMEOUT - WARNING_TIME) {

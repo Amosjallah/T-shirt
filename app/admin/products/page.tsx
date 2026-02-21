@@ -80,9 +80,9 @@ export default function ProductsPage() {
         // Calculate stats locally for now (better to do count queries in production)
         setStats({
           total: transformedProducts.length,
-          lowStock: transformedProducts.filter(p => p.quantity < (p.metadata?.low_stock_threshold || 5) && p.quantity > 0).length,
-          outOfStock: transformedProducts.filter(p => p.quantity === 0).length,
-          active: transformedProducts.filter(p => p.status === 'active').length
+          lowStock: transformedProducts.filter((p: any) => p.quantity < (p.metadata?.low_stock_threshold || 5) && p.quantity > 0).length,
+          outOfStock: transformedProducts.filter((p: any) => p.quantity === 0).length,
+          active: transformedProducts.filter((p: any) => p.status === 'active').length
         });
       }
     } catch (error) {
@@ -96,13 +96,13 @@ export default function ProductsPage() {
     if (selectedProducts.length === products.length) {
       setSelectedProducts([]);
     } else {
-      setSelectedProducts(products.map(p => p.id));
+      setSelectedProducts(products.map((p: any) => p.id));
     }
   };
 
   const handleSelectProduct = (productId: string) => {
     if (selectedProducts.includes(productId)) {
-      setSelectedProducts(selectedProducts.filter(id => id !== productId));
+      setSelectedProducts(selectedProducts.filter((id: string) => id !== productId));
     } else {
       setSelectedProducts([...selectedProducts, productId]);
     }
@@ -112,7 +112,7 @@ export default function ProductsPage() {
     if (confirm('Are you sure you want to delete this product?')) {
       const { error } = await supabase.from('products').delete().eq('id', productId);
       if (!error) {
-        setProducts(products.filter(p => p.id !== productId));
+        setProducts(products.filter((p: any) => p.id !== productId));
         alert('Product deleted successfully');
       } else {
         alert('Error deleting product');
@@ -124,7 +124,7 @@ export default function ProductsPage() {
     if (confirm(`Are you sure you want to delete ${selectedProducts.length} products?`)) {
       const { error } = await supabase.from('products').delete().in('id', selectedProducts);
       if (!error) {
-        setProducts(products.filter(p => !selectedProducts.includes(p.id)));
+        setProducts(products.filter((p: any) => !selectedProducts.includes(p.id)));
         setSelectedProducts([]);
         alert('Products deleted successfully');
       } else {
@@ -133,7 +133,7 @@ export default function ProductsPage() {
     }
   };
 
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products.filter((product: any) => {
     const term = searchQuery.toLowerCase();
     return product.name.toLowerCase().includes(term) ||
       (product.sku && product.sku.toLowerCase().includes(term)) ||
@@ -295,7 +295,7 @@ export default function ProductsPage() {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product: any) => (
                   <tr key={product.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6">
                       <input
@@ -358,7 +358,7 @@ export default function ProductsPage() {
           </div>
         ) : (
           <div className="p-6 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product: any) => (
               <div key={product.id} className="border-2 border-gray-200 rounded-xl p-4 hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <input

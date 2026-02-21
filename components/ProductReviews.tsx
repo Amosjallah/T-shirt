@@ -38,7 +38,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
   useEffect(() => {
     // Check auth
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       setUser(session?.user || null);
     });
 
@@ -87,11 +87,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
   };
 
   const averageRating = reviews.length > 0
-    ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
+    ? reviews.reduce((acc: number, r: Review) => acc + r.rating, 0) / reviews.length
     : 0;
 
-  const ratingDistribution = [5, 4, 3, 2, 1].map(star => {
-    const count = reviews.filter(r => r.rating === star).length;
+  const ratingDistribution = [5, 4, 3, 2, 1].map((star: number) => {
+    const count = reviews.filter((r: Review) => r.rating === star).length;
     return {
       star,
       count,
@@ -101,7 +101,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
   const filteredReviews = filter === 'all'
     ? reviews
-    : reviews.filter(r => r.rating === parseInt(filter));
+    : reviews.filter((r: Review) => r.rating === parseInt(filter));
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +168,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
             <div className="text-center">
               <div className="text-5xl font-bold text-gray-900 mb-2">{averageRating.toFixed(1)}</div>
               <div className="flex items-center justify-center mb-2">
-                {[1, 2, 3, 4, 5].map((star) => (
+                {[1, 2, 3, 4, 5].map((star: number) => (
                   <i
                     key={star}
                     className={`ri-star-${star <= Math.round(averageRating) ? 'fill' : 'line'} text-xl ${star <= Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'
@@ -181,7 +181,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
             <div className="md:col-span-2">
               <div className="space-y-2">
-                {ratingDistribution.map((dist) => (
+                {ratingDistribution.map((dist: any) => (
                   <div key={dist.star} className="flex items-center space-x-3">
                     <button
                       onClick={() => setFilter(dist.star.toString())}
@@ -236,7 +236,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-900 mb-2">Your Rating *</label>
             <div className="flex space-x-2">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map((star: number) => (
                 <button
                   key={star}
                   type="button"
@@ -304,7 +304,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
       )}
 
       <div className="space-y-6">
-        {filteredReviews.map((review) => (
+        {filteredReviews.map((review: Review) => (
           <div key={review.id} className="pb-6 border-b border-gray-200 last:border-0">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center space-x-3">
@@ -326,7 +326,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               </div>
 
               <div className="flex items-center space-x-1">
-                {[1, 2, 3, 4, 5].map((star) => (
+                {[1, 2, 3, 4, 5].map((star: number) => (
                   <i
                     key={star}
                     className={`ri-star-${star <= review.rating ? 'fill' : 'line'} text-lg ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'

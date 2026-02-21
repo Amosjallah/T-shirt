@@ -64,8 +64,8 @@ export default function AdminCouponsPage() {
     setShowEditModal(true);
   };
 
-  const activeCoupons = coupons.filter(c => c.status === 'Active');
-  const totalUses = coupons.reduce((sum, c) => sum + c.usedCount, 0);
+  const activeCoupons = coupons.filter((c: any) => c.status === 'Active');
+  const totalUses = coupons.reduce((sum: number, c: any) => sum + c.usedCount, 0);
 
   return (
     <div className="space-y-6">
@@ -142,7 +142,7 @@ export default function AdminCouponsPage() {
               ) : coupons.length === 0 ? (
                 <tr><td colSpan={8} className="p-8 text-center text-gray-500">No coupons found.</td></tr>
               ) : (
-                coupons.map((coupon) => (
+                coupons.map((coupon: any) => (
                   <tr key={coupon.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex items-center space-x-2">

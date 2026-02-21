@@ -200,11 +200,6 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
       const { data: { session } } = await supabase.auth.getSession();
       const authToken = session?.access_token;
 
-      const shippingAddress = order.shipping_address || {};
-      const customerName = (shippingAddress.firstName && shippingAddress.lastName)
-        ? `${shippingAddress.firstName.trim()} ${shippingAddress.lastName.trim()}`
-        : shippingAddress.full_name || shippingAddress.firstName || order.email?.split('@')[0] || 'Customer';
-
       const response = await fetch('/api/notifications', {
         method: 'POST',
         headers: {
@@ -444,7 +439,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Order Timeline</h2>
               <div className="space-y-4">
-                {timeline.map((event, index) => (
+                {timeline.map((event: any, index: number) => (
                   <div key={index} className="flex items-start space-x-4">
                     <div className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${event.completed ? 'bg-blue-700 border-blue-700' : 'bg-white border-gray-300'
                       }`}>
@@ -481,7 +476,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                 </button>
                 {showStatusMenu && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden z-10">
-                    {statusOptions.map((status) => (
+                    {statusOptions.map((status: any) => (
                       <button
                         key={status}
                         onClick={() => {

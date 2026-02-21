@@ -47,16 +47,16 @@ export default function NotificationsPage() {
                 const emails = [c.email, c.secondary_email].filter(Boolean).map((e: string) => e.toLowerCase().trim());
 
                 // Pick first unique phone for this customer
-                const uniquePhone = phones.find(p => !seenPhones.has(p)) || null;
+                const uniquePhone = phones.find((p: string) => !seenPhones.has(p)) || null;
                 if (uniquePhone) seenPhones.add(uniquePhone);
 
                 // Pick first unique email for this customer
-                const uniqueEmail = emails.find(e => !seenEmails.has(e)) || null;
+                const uniqueEmail = emails.find((e: string) => !seenEmails.has(e)) || null;
                 if (uniqueEmail) seenEmails.add(uniqueEmail);
 
                 // Also mark all their contact info as seen to avoid duplicates from other customers
-                phones.forEach(p => seenPhones.add(p));
-                emails.forEach(e => seenEmails.add(e));
+                phones.forEach((p: string) => seenPhones.add(p));
+                emails.forEach((e: string) => seenEmails.add(e));
 
                 const recipient = { email: uniqueEmail, phone: uniquePhone, name: c.full_name };
 
@@ -71,8 +71,8 @@ export default function NotificationsPage() {
             if (recipients.length === 0) throw new Error('No recipients found with valid contact info');
 
             // Confirm before sending
-            const smsCount = recipients.filter(r => r.phone).length;
-            const emailCount = recipients.filter(r => r.email).length;
+            const smsCount = recipients.filter((r: any) => r.phone).length;
+            const emailCount = recipients.filter((r: any) => r.email).length;
             const summary = [];
             if (form.channels.sms) summary.push(`${smsCount} SMS (deduplicated)`);
             if (form.channels.email) summary.push(`${emailCount} emails`);
@@ -135,7 +135,7 @@ export default function NotificationsPage() {
             if (totalSms > 0) resultParts.push(`${totalSms} SMS`);
             const errorNote = totalErrors > 0 ? ` (${totalErrors} failed)` : '';
             setSuccess(`Campaign sent successfully! ${resultParts.join(', ')} sent.${errorNote}`);
-            setForm(prev => ({ ...prev, subject: '', message: '' }));
+            setForm((prev: any) => ({ ...prev, subject: '', message: '' }));
         } catch (err: any) {
             setError(err.message);
         } finally {

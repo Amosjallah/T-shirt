@@ -70,7 +70,7 @@ export default function AdminLayout({
     checkAuth();
 
     // Keep cookie in sync when session refreshes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: any, session: any) => {
       if (event === 'TOKEN_REFRESHED' && session) {
         document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax; Secure`;
       }

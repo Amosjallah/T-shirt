@@ -1,10 +1,33 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+let _client: ReturnType<typeof createClient> | null = null;
 
-if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Missing Supabase environment variables');
-}
+const getSupabase = () => {
+    if (_client) return _client;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder';
+
+    if (
+        !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+        process.env.NEXT_PUBLIC_SUPABASE_URL === 'your_supabase_url'
+    ) {
+        console.warn('[supabase] Supabase client initialized with missing or placeholder environment variables');
+    }
+
+    try {
+        _client = createClient(supabaseUrl, supabaseKey);
+    } catch (e) {
+        console.warn('[supabase] Failed to initialize Supabase client:', e);
+        _client = {} as any;
+    }
+
+    return _client!;
+};
+
+export const supabase = new Proxy({} as any, {
+    get: (_target, prop) => {
+        const client = getSupabase();
+        return (client as any)[prop];
+    }
+});

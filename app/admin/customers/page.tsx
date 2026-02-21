@@ -90,11 +90,11 @@ export default function AdminCustomersPage() {
 
       // Process registered users
       const registeredCustomers = (profiles || []).map((profile: any) => {
-        const userOrders = orders?.filter(o => o.user_id === profile.id && o.status !== 'cancelled') || [];
-        const totalSpent = userOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+        const userOrders = orders?.filter((o: any) => o.user_id === profile.id && o.status !== 'cancelled') || [];
+        const totalSpent = userOrders.reduce((sum: number, o: any) => sum + Number(o.total || 0), 0);
         let lastOrderDate: Date | null = null;
         if (userOrders.length > 0) {
-          const dates = userOrders.map(o => new Date(o.created_at).getTime());
+          const dates = userOrders.map((o: any) => new Date(o.created_at).getTime());
           lastOrderDate = new Date(Math.max(...dates));
         }
 
@@ -120,10 +120,10 @@ export default function AdminCustomersPage() {
       });
 
       // Process guest orders (no user_id)
-      const guestOrders = orders?.filter(o => !o.user_id && o.email) || [];
+      const guestOrders = orders?.filter((o: any) => !o.user_id && o.email) || [];
       const guestMap = new Map<string, any>();
 
-      guestOrders.forEach(order => {
+      guestOrders.forEach((order: any) => {
         const existing = guestMap.get(order.email);
         const orderTotal = Number(order.total) || 0;
         const orderDate = new Date(order.created_at);
@@ -217,13 +217,13 @@ export default function AdminCustomersPage() {
     if (selectedCustomers.length === customers.length) {
       setSelectedCustomers([]);
     } else {
-      setSelectedCustomers(customers.map(c => c.id));
+      setSelectedCustomers(customers.map((c: any) => c.id));
     }
   };
 
   const handleSelectCustomer = (customerId: string) => {
     if (selectedCustomers.includes(customerId)) {
-      setSelectedCustomers(selectedCustomers.filter(id => id !== customerId));
+      setSelectedCustomers(selectedCustomers.filter((id: string) => id !== customerId));
     } else {
       setSelectedCustomers([...selectedCustomers, customerId]);
     }
@@ -235,13 +235,13 @@ export default function AdminCustomersPage() {
 
     // Filter by Status
     if (filterStatus !== 'All Customers') {
-      result = result.filter(c => c.status === filterStatus);
+      result = result.filter((c: any) => c.status === filterStatus);
     }
 
     // Search
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(c =>
+      result = result.filter((c: any) =>
         c.name.toLowerCase().includes(q) ||
         c.email.toLowerCase().includes(q) ||
         c.phone.toLowerCase().includes(q)
@@ -263,13 +263,13 @@ export default function AdminCustomersPage() {
   // Derived Stats
   const stats = useMemo(() => ({
     total: customers.length,
-    newThisMonth: customers.filter(c => {
+    newThisMonth: customers.filter((c: any) => {
       const d = new Date(c.rawJoined);
       const now = new Date();
       return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
     }).length,
-    vip: customers.filter(c => c.status === 'VIP').length,
-    avgLTV: customers.length > 0 ? (customers.reduce((sum, c) => sum + c.totalSpent, 0) / customers.length) : 0
+    vip: customers.filter((c: any) => c.status === 'VIP').length,
+    avgLTV: customers.length > 0 ? (customers.reduce((sum: number, c: any) => sum + c.totalSpent, 0) / customers.length) : 0
   }), [customers]);
 
   return (

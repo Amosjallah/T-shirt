@@ -51,8 +51,8 @@ export default function CustomerInsightsPage() {
 
       // 3. Aggregate Data
       const aggregated = profiles.map((profile: any) => {
-        const userOrders = orders?.filter(o => o.user_id === profile.id) || [];
-        const totalSpent = userOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+        const userOrders = orders?.filter((o: any) => o.user_id === profile.id) || [];
+        const totalSpent = userOrders.reduce((sum: number, o: any) => sum + (o.total || 0), 0);
         const orderCount = userOrders.length;
 
         // Sort orders to find last order
@@ -102,12 +102,12 @@ export default function CustomerInsightsPage() {
       setCustomers(aggregated);
 
       // Calculate Stats
-      const totalCLV = aggregated.reduce((sum, c) => sum + c.lifetimeValue, 0);
+      const totalCLV = aggregated.reduce((sum: number, c: any) => sum + c.lifetimeValue, 0);
       setStats({
-        vip: aggregated.filter(c => c.segment === 'vip').length,
-        returning: aggregated.filter(c => c.segment === 'returning').length,
-        new: aggregated.filter(c => c.segment === 'new').length,
-        atRisk: aggregated.filter(c => c.segment === 'at-risk').length,
+        vip: aggregated.filter((c: any) => c.segment === 'vip').length,
+        returning: aggregated.filter((c: any) => c.segment === 'returning').length,
+        new: aggregated.filter((c: any) => c.segment === 'new').length,
+        atRisk: aggregated.filter((c: any) => c.segment === 'at-risk').length,
         avgCLV: aggregated.length > 0 ? totalCLV / aggregated.length : 0
       });
 
@@ -119,7 +119,7 @@ export default function CustomerInsightsPage() {
   };
 
 
-  const filteredCustomers = customers.filter(customer => {
+  const filteredCustomers = customers.filter((customer: any) => {
     const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSegment = selectedSegment === 'all' || customer.segment === selectedSegment;
@@ -247,7 +247,7 @@ export default function CustomerInsightsPage() {
                 { value: 'returning', label: 'Returning', count: stats.returning },
                 { value: 'new', label: 'New', count: stats.new },
                 { value: 'at-risk', label: 'At Risk', count: stats.atRisk }
-              ].map((segment) => (
+              ].map((segment: any) => (
                 <button
                   key={segment.value}
                   onClick={() => setSelectedSegment(segment.value)}
@@ -269,7 +269,7 @@ export default function CustomerInsightsPage() {
               <p className="text-gray-500">No customers found matching this criteria.</p>
             </div>
           ) : (
-            filteredCustomers.map((customer) => (
+            filteredCustomers.map((customer: any) => (
               <div key={customer.id} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start space-x-4">

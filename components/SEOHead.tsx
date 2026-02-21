@@ -53,7 +53,7 @@ export function generateMetadata({
       title: fullTitle,
       description,
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
-      type: ogType as any,
+      type: ogType === 'product' ? 'website' : ogType as any,
       siteName,
       locale: 'en_GH'
     },
