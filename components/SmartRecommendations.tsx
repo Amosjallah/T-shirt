@@ -63,7 +63,7 @@ export default function SmartRecommendations({ productId, type, title }: SmartRe
   useEffect(() => {
     const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
     setProducts(shuffled.slice(0, 4));
-  }, [productId, type, allProducts]);
+  }, [productId, type]);
 
   const getTitleByType = () => {
     if (title) return title;

@@ -42,7 +42,7 @@ export default function FlashSaleBanner() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [flashSale.endTime]);
+  }, []);
 
   if (!isVisible) return null;
 

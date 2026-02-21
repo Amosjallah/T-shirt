@@ -94,7 +94,7 @@ export default function AdvancedSearch() {
     } else {
       setSuggestions([]);
     }
-  }, [query, allProducts]);
+  }, [query]);
 
   const handleSearch = (searchQuery: string) => {
     if (searchQuery.trim()) {
