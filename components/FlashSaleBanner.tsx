@@ -10,17 +10,18 @@ interface FlashSale {
   ctaLink: string;
 }
 
+const flashSale: FlashSale = {
+  title: 'Flash Sale',
+  discount: 30,
+  endTime: new Date(Date.now() + 6 * 60 * 60 * 1000), // Note: This will be stable for the module lifecycle
+  ctaText: 'Shop Now',
+  ctaLink: '/shop'
+};
+
 export default function FlashSaleBanner() {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [isVisible, setIsVisible] = useState(true);
 
-  const flashSale: FlashSale = {
-    title: 'Flash Sale',
-    discount: 30,
-    endTime: new Date(Date.now() + 6 * 60 * 60 * 1000),
-    ctaText: 'Shop Now',
-    ctaLink: '/shop'
-  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -41,7 +42,7 @@ export default function FlashSaleBanner() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [flashSale.endTime]);
 
   if (!isVisible) return null;
 

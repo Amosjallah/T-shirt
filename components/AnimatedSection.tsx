@@ -111,7 +111,7 @@ export function AnimatedGrid({
     observer.observe(container);
 
     return () => observer.unobserve(container);
-  }, [childrenArray.length, staggerDelay]);
+  }, [childrenArray, staggerDelay]);
 
   return (
     <div ref={containerRef} className={className}>
