@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { clearCache } from '@/lib/query-cache';
 
 export default function AdminCategoriesPage() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -65,6 +66,7 @@ export default function AdminCategoriesPage() {
       try {
         const { error } = await supabase.from('categories').delete().eq('id', categoryId);
         if (error) throw error;
+        clearCache();
         setCategories(categories.filter(c => c.id !== categoryId));
         alert('Category deleted successfully');
       } catch (err: any) {
@@ -136,7 +138,9 @@ export default function AdminCategoriesPage() {
           .insert([payload]);
         if (error) throw error;
         alert('Category created');
+        clearCache();
       }
+      clearCache();
 
       setShowAddModal(false);
       setShowEditModal(false);

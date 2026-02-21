@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 
 // Simple in-memory cache
 let cache: { data: any; timestamp: number } | null = null;
-const CACHE_TTL = 15 * 60 * 1000; // 15 minutes — products don't change frequently
+const CACHE_TTL = 10 * 1000; // 10 seconds - products should update quickly after admin changes
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);

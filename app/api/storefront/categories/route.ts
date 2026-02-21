@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 
 // Simple in-memory cache
 let cache: { data: any; timestamp: number } | null = null;
-const CACHE_TTL = 30 * 60 * 1000; // 30 minutes — categories rarely change
+const CACHE_TTL = 10 * 1000; // 10 seconds - categories should update quickly after admin changes
 
 export async function GET() {
     // Check cache

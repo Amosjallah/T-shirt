@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
+import { clearCache } from '@/lib/query-cache';
 
 interface ProductFormProps {
     initialData?: any;
@@ -370,7 +371,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                     if (varError) throw varError;
                 }
             }
-
+            clearCache();
             alert(isEditMode ? 'Product updated successfully!' : 'Product created successfully!');
             router.push('/admin/products');
 
@@ -717,8 +718,8 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                                                 key={color.name}
                                                 onClick={() => toggleColor(color)}
                                                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg border-2 transition-all text-sm font-medium ${isSelected
-                                                        ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600'
-                                                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                                                    ? 'border-blue-600 bg-blue-50 ring-1 ring-blue-600'
+                                                    : 'border-gray-200 hover:border-gray-300 bg-white'
                                                     }`}
                                                 title={color.name}
                                             >
@@ -796,8 +797,8 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                                                 key={size}
                                                 onClick={() => toggleSize(size)}
                                                 className={`px-5 py-2.5 rounded-lg border-2 font-semibold text-sm transition-all ${isSelected
-                                                        ? 'border-blue-600 bg-blue-50 text-blue-800 ring-1 ring-blue-600'
-                                                        : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                                                    ? 'border-blue-600 bg-blue-50 text-blue-800 ring-1 ring-blue-600'
+                                                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
                                                     }`}
                                             >
                                                 {size}
